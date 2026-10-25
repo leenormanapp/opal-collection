@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opal Collection</title>
+<style>
+body{margin:0;background:#0a0908;color:#ede7dd;font-family:system-ui;height:100dvh;display:flex;flex-direction:column}
+header{padding:16px 20px;border-bottom:1px solid #3d342c}
+h1{font-size:18px;margin:0}
+.wrap{flex:1;position:relative;background:#000}
+video{width:100%;height:100%;object-fit:cover}
+.overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,#0a0908)}
+.pass{color:#c25e22;font-size:11px;letter-spacing:2px}
+.btn{background:#ede7dd;color:#0a0908;border:none;padding:16px;width:100%;font-weight:700;margin-top:12px}
+.error{color:#e0873a;padding:20px;text-align:center}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header><h1>Opal Collection</h1></header>
+<div class="wrap">
+  <video id="video" autoplay playsinline muted></video>
+  <div id="err" class="error hidden">Allow camera access and refresh.</div>
+  <div class="overlay">
+    <div class="pass">PASS A — APPEARANCE</div>
+    <div id="label" style="font-size:20px;font-weight:600;margin:4px 0">Front surface</div>
+    <div id="inst" style="color:#c4b8a5;font-size:14px;margin-bottom:12px">Hold steady. Fill the frame.</div>
+    <button class="btn" id="btn">CAPTURE</button>
+  </div>
+</div>
+<script>
+const steps=['Front surface','Reverse','Side 1','Side 2','Colour flash'];
+let i=0;
+const v=document.getElementById('video');
+async function cam(){
+  try{
+    const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    v.srcObject=s;
+  }catch(e){document.getElementById('err').classList.remove('hidden');}
+}
+document.getElementById('btn').onclick=()=>{
+  if(i<steps.length-1){i++;document.getElementById('label').textContent=steps[i];}
+  else{alert('Capture complete. Reconstruction next.');}
+};
+cam();
+</script>
+</body>
+</html>
